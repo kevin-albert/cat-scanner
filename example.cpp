@@ -45,7 +45,7 @@ int main(void) {
     // Backward Pass
     std::cout << "Backward pass\n";
 
-    Vector delta_y = (y_expected-y).cwiseProduct(y).cwiseProduct(Vector::Constant(2,1) - y);
+    Vector delta_y = (y - y_expected).cwiseProduct(y).cwiseProduct(Vector::Constant(2,1) - y);
     Vector delta_h = (Wyh.transpose() * delta_y).cwiseProduct(h).cwiseProduct(Vector::Constant(100,1) - h);
 
     Matrix dWyh = delta_y * h.transpose();
@@ -57,10 +57,10 @@ int main(void) {
     // Parameter Updates
     float mu = 0.1;
     
-    Wyh += dWyh * mu;
-    Whx += dWhx * mu;
-    by += dy * mu;
-    bh += dh * mu; 
+    Wyh -= dWyh * mu;
+    Whx -= dWhx * mu;
+    by -= dy * mu;
+    bh -= dh * mu; 
 
 
     // Forward pass 2
